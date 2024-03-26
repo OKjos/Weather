@@ -1,29 +1,43 @@
 const apiKey = "cf094f80ec14dcb16cfbd1a7f191a6dd";
-const apiUrl = "https://api.openweathermap.org/data/2.5/weather?lat=57&lon=-2.15&appid=cf094f80ec14dcb16cfbd1a7f191a6dd&units=imperial";
+const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=imperial&q=";
 
-// const something to query the city input
-// const something to query the search button
-//weatherIcon query 
+const searchBox = document.querySelector('.search input');
+const searchbtn = document.querySelector('.search button');
+const weatherIcon = document.querySelector('.weather-icon')
 
-// add city
-async function checkWeather() {
-  //add city
-  const response = await fetch(apiUrl + '&appid=${apikey}');
+
+async function checkWeather(city) {
+const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
   let data = await response.json();
 
   console.log(data);
 
 
-  //query city.inner = data.name
-  //same as above for temp .main.temp + °F need math.round
-  //same as first for humidity .main.humdity + %
-  //same as first for wind .main.wind.speed + mph
+  document.querySelector('.city').innerHTML = data.name;
+  document.querySelector('.temp').innerHTML = Math.round(data.main.temp) + "°F";
+  document.querySelector('.humidity').innerHTML = data.main.humidity + "%";
+  document.querySelector('.wind').innerHTML = data.wind.speed + "mph";
 
 
-  //if statement for image changing 
+  if(data.weather[0].main == "Clouds") {
+    weatherIcon.src = "./Images/clouds.png"
+  } else if (data.weather[0].main == "Clear") {
+    weatherIcon.src = "./Images/clear.png"
+  } else if (data.weather[0].main == "Drizzle") {
+    weatherIcon.src = "./Images/drizzle.png"
+  } else if (data.weather[0].main == "Mist") {
+    weatherIcon.src = "./Images/mist.png"
+  } else if (data.weather[0].main == "Rain") {
+    weatherIcon.src = "./Images/rain.png"
+  } else if (data.weather[0] == "Snow") {
+    weatherIcon.src = "./Images/snow.png"
+  }
+
+  document.querySelector(".weather").style.display = "block"
 
 }
 
 
-//add city
-checkWeather();
+searchbtn.addEventListener("click", () => {
+  checkWeather(searchBox.value);
+})
